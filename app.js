@@ -5,7 +5,8 @@ const requests = require('requests');
 const fs = require('fs')
 const bodyParser = require('body-parser')
 
-
+const ARGS = process.argv.splice(2).map(option => option.toLowerCase());
+const IS_NO_AUTH = ARGS.includes('-noauth');
 const FBJS_URL = 'http://172.16.3.159:420/';
 const AUTH_URL = 'http://172.16.3.159:420/oauth';
 const THIS_URL = 'http://localhost:3000/login';
@@ -31,12 +32,16 @@ app.use(session({
 }))
 
 // Load all user data
-var data = JSON.parse(fs.readFileSync('data.json'));
+const data = JSON.parse(fs.readFileSync('data.json'));
+let guestNum = 1;
 
 // Middleware checks if user is logged in before continuing
 function isAuthenticated(req, res, next) {
-    if (req.session.user) next()
-    else res.redirect(`/login?redirectURL=${THIS_URL}`)
+   if (req.session.user) {
+        return next()
+    } else {
+        return res.redirect(`/login?redirectURL=${THIS_URL}`)
+    }
 };
 
 // Root / homepage
@@ -107,6 +112,12 @@ app.post('/submiths', (req, res) => {
 
 // Collect login data from Formbar
 app.get('/login', (req, res) => {
+    if (IS_NO_AUTH) {
+        req.session.user = `GUEST-${guestNum}`;
+        res.redirect('/');
+        return;
+    }
+
     if (req.query.token) {
         let tokenData = jwt.decode(req.query.token);
         req.session.token = tokenData;

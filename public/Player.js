@@ -74,12 +74,13 @@ class Player {
 
         this.yv = Math.clamp(this.yv, min, max);
 
-        this.yv += this.gravity * this.gravityDir;
+        this.yv += this.gravity * this.gravityDir * dt;
 
-        this.x += this.xv * this.spd;
+        this.x += this.xv * this.spd * dt;
 
-        if (!this.dead) this.y += this.yv;
-
+        if (!this.dead && physicsTicking) {
+            this.y += this.yv * dt;
+        }
     }
 
     update(){

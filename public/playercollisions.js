@@ -1,5 +1,10 @@
-function testPlayerCollisions(currentChunk) {
+// Prevent potential death when game first starts
+let physicsTicking = false;
+function enablePhysics() {
+    physicsTicking = true;
+}
 
+function testPlayerCollisions(currentChunk) {
     //BLOCK COLLISION
 
     var topBlockIndex = currentChunk.blocks.findIndex(block => topCollision(player, block));
@@ -10,13 +15,12 @@ function testPlayerCollisions(currentChunk) {
 
     if (topBlockIndex !== -1) {
         if (currentChunk.blocks[topBlockIndex].type == 'block') {
-
             player.y = currentChunk.blocks[topBlockIndex].y - player.h;
             player.yv = 0;
             if (player.gravityDir === 1) player.onGround = true;
         }
 
-        if (currentChunk.blocks[topBlockIndex].type == 'spike') {
+        if (currentChunk.blocks[topBlockIndex].type == 'spike' && physicsTicking) {
             player.dead = true;
         }
 
@@ -42,7 +46,7 @@ function testPlayerCollisions(currentChunk) {
             player.onGround = false;
         }
 
-        if (currentChunk.blocks[bottomBlockIndex].type == 'spike') {
+        if (currentChunk.blocks[bottomBlockIndex].type == 'spike' && physicsTicking) {
             player.dead = true;
         }
     }
@@ -57,7 +61,7 @@ function testPlayerCollisions(currentChunk) {
             sh.uses--;
             //shakeScreen(100)
             screenShake = true;
-        } else {
+        } else if (physicsTicking) {
             player.onGround = true;
             player.dead = true;
         }

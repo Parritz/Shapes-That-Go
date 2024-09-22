@@ -124,14 +124,19 @@ var lastLevel = 0;
 player.currentChunk = chunks[0];
 var latestChunk = chunks[0];
 
-var deltaTime = 0;
-var lastTimestamp = 0;
-
 chunks[0].create();
 
-function update(timestamp) {
+let then = Date.now();
+function getDeltaTime(){
+    let now = Date.now()
+    let dt = (now - then);
+    then = now;
 
-    var deltaTime = (timestamp - lastTimestamp) / 15;
+    return dt / (1000 / 60);
+}
+
+function update(timestamp) {
+    let deltaTime = getDeltaTime();
 
     stage.canvas.width = window.innerWidth;
     stage.canvas.height = window.innerHeight;
@@ -267,7 +272,7 @@ function update(timestamp) {
         player.draw();
         player.physics(deltaTime);
         player.update();
-        scoreCD--;
+        scoreCD -= deltaTime; 
         testPlayerCollisions(player.currentChunk);
     } else {
         if (!player.exploded) { //Make player explode if the player has not already exploded
@@ -318,9 +323,7 @@ function update(timestamp) {
         scoreCD = scoreCoolDown;
     }
 
-    lastTimestamp = timestamp;
     requestAnimationFrame(update);
-
 }
 
 document.addEventListener('keydown', function (event) {
@@ -351,11 +354,8 @@ document.addEventListener('keydown', function (event) {
 
 })
 
-document.addEventListener('keyup', function (event) {
-
-});
-
 window.onload = function () {
+    setInterval(enablePhysics, 100);
     requestAnimationFrame(update);
 }
 
