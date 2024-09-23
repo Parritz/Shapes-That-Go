@@ -2,6 +2,7 @@ var stage = document.getElementById('canvas').getContext('2d');
 stage.canvas.width = window.innerWidth;
 stage.canvas.height = window.innerHeight;
 
+let screenHeightMagnitude = 1080/window.outerHeight;
 stage.imageSmoothingEnabled = false;
 
 var screenShake = false;

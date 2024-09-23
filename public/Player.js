@@ -125,7 +125,7 @@ class Player {
         if (this.jumps < 1) {
             this.onGround = false;
             this.jumping = true;
-            this.yv = -this.jumpheight * this.gravityDir;
+            this.yv = -this.jumpheight * this.gravityDir * screenHeightMagnitude;
             this.jumps = this.doublejump ? this.jumps + 0.5 : this.jumps + 1;
         }
     }
