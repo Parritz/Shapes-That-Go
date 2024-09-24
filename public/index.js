@@ -141,6 +141,7 @@ function update(timestamp) {
 
     stage.canvas.width = window.innerWidth;
     stage.canvas.height = window.innerHeight;
+    screenHeightMagnitude = 1080/window.outerHeight;
     stage.clearRect(0, 0, stage.canvas.width, stage.canvas.height);
 
     stage.canvas.style.left = screenShake ? String(Math.random() * (shakeAmount - -shakeAmount) + -shakeAmount) + "px" : 0; //Screenshake

@@ -43,6 +43,11 @@ class Player {
         this.shieldW = 10;
         this.shieldH = this.h;
 
+        // window.addEventListener("resize", () => {
+        //     this.OGjumpheight = blockSize / 2;
+        //     this.doubleJumpHeight = this.OGjumpheight * 1.2;
+        //     this.jumpheight = this.OGjumpheight;
+        // });
     }
 
     draw() {
@@ -123,9 +128,10 @@ class Player {
         }
         
         if (this.jumps < 1) {
+            let scalingFactor = screenHeightMagnitude * (blockSize / 83);
             this.onGround = false;
             this.jumping = true;
-            this.yv = -this.jumpheight * this.gravityDir * screenHeightMagnitude;
+            this.yv = -this.jumpheight * this.gravityDir * scalingFactor;
             this.jumps = this.doublejump ? this.jumps + 0.5 : this.jumps + 1;
         }
     }
