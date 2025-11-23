@@ -63,7 +63,7 @@ class Player {
             var b = Math.round(Math.random() * 255);
 
             stage.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
-            stage.fillRect(this.shieldX, this.y-10, this.shieldW, this.h+20);
+            stage.fillRect(this.shieldX, this.y - 10, this.shieldW, this.h + 20);
             //stage.fillRect(this.shieldX, this.shieldY, this.shieldW, this.shieldH);
 
         }
@@ -73,7 +73,7 @@ class Player {
     physics(dt) {
 
         var min = this.gravityDir == 1 ? -65 : -25;
-        var max = this.gravityDir == 1 ? 25 : 65;    
+        var max = this.gravityDir == 1 ? 25 : 65;
 
         //console.log(this.yv);
 
@@ -88,30 +88,30 @@ class Player {
         }
     }
 
-    update(){
+    update(deltaTime) {
 
-        for(p=0;p<this.activePowerups.length;p++){
+        for (p = 0; p < this.activePowerups.length; p++) {
 
-            if(this.activePowerups[p].expireTime <= 0 || this.activePowerups[p].uses == 0){
+            if (this.activePowerups[p].expireTime <= 0 || this.activePowerups[p].uses == 0) {
                 eval("player." + this.activePowerups[p].type + " = false;");
-                this.activePowerups.splice(p,1);
+                this.activePowerups.splice(p, 1);
             } else {
-                this.activePowerups[p].update();
+                this.activePowerups[p].update(deltaTime);
             }
 
         }
 
         this.shieldX = this.x + this.w * 1.4;
-        this.shieldY = this.y+this.h/3;
+        this.shieldY = this.y + this.h / 3;
         this.shieldW = 10;
-        this.shieldH = this.h/5;
+        this.shieldH = this.h / 5;
 
     }
 
-    hasPowerup(type){
+    hasPowerup(type) {
 
-        for(p=0;p<player.activePowerups.length;p++){
-            if(player.activePowerups[p].type == type){
+        for (p = 0; p < player.activePowerups.length; p++) {
+            if (player.activePowerups[p].type == type) {
                 return true;
             }
         }
@@ -122,13 +122,13 @@ class Player {
 
     jump() {
         this.jumpheight = this.jumps == 0.5 ? this.doubleJumpHeight : this.OGjumpheight;
-        if(this.jumps == 0.5){
+        if (this.jumps == 0.5) {
             var DJ = this.activePowerups[this.activePowerups.findIndex(dj => dj.type == "doublejump")]
-            DJ.uses-=1;
+            DJ.uses -= 1;
         }
-        
+
         if (this.jumps < 1) {
-            let scalingFactor = screenHeightMagnitude * (blockSize / 83);
+            let scalingFactor = screenHeightMagnitude * (blockSize / 83) * 1.5;
             this.onGround = false;
             this.jumping = true;
             this.yv = -this.jumpheight * this.gravityDir * scalingFactor;
@@ -136,16 +136,16 @@ class Player {
         }
     }
 
-    shieldCollision(block){
+    shieldCollision(block) {
         if (
-            this.shieldX+this.shieldW >= block.x && this.shieldX <= block.x+block.w && this.shieldY+this.shieldH >= block.y && this.shieldY <= block.y+block.h
-          ) {
+            this.shieldX + this.shieldW >= block.x && this.shieldX <= block.x + block.w && this.shieldY + this.shieldH >= block.y && this.shieldY <= block.y + block.h
+        ) {
             // Collision detected!
             return true;
-          } else {
+        } else {
             // No collision
             return false;
-          }
+        }
     }
 
 }

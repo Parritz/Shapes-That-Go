@@ -1,6 +1,6 @@
 class Block {
 
-    constructor(x,y,w,h,c){
+    constructor(x, y, w, h, c) {
 
         this.x = x;
         this.y = y;
@@ -14,7 +14,7 @@ class Block {
 
     }
 
-    draw(){
+    draw() {
 
         stage.fillStyle = this.color;
         stage.lineWidth = 1;
@@ -24,7 +24,7 @@ class Block {
 
     }
 
-    scroll(scrollSpd){
+    scroll(scrollSpd) {
 
         this.x -= scrollSpd;
 
@@ -34,7 +34,7 @@ class Block {
 
 class Spike {
 
-    constructor(x,y,w,h,c,dir){
+    constructor(x, y, w, h, c, dir) {
 
         this.x = x;
         this.y = y;
@@ -49,30 +49,30 @@ class Spike {
 
     }
 
-    draw(){
-            stage.fillStyle = this.color;
-            stage.lineWidth = 1;
+    draw() {
+        stage.fillStyle = this.color;
+        stage.lineWidth = 1;
 
-        if(this.direction == 1){
+        if (this.direction == 1) {
             stage.beginPath();
-            stage.moveTo(this.x, this.y+this.h);
-            stage.lineTo(this.x+this.w/2, this.y);
-            stage.lineTo(this.x+this.w, this.y+this.h);
-            stage.lineTo(this.x, this.y+this.h);
+            stage.moveTo(this.x, this.y + this.h);
+            stage.lineTo(this.x + this.w / 2, this.y);
+            stage.lineTo(this.x + this.w, this.y + this.h);
+            stage.lineTo(this.x, this.y + this.h);
             stage.fill();
             stage.fillStyle = '#000000';
-        } else if(this.direction == -1){
+        } else if (this.direction == -1) {
             stage.beginPath();
             stage.moveTo(this.x, this.y);
-            stage.lineTo(this.x+this.w/2, this.y+this.h);
-            stage.lineTo(this.x+this.w, this.y);
+            stage.lineTo(this.x + this.w / 2, this.y + this.h);
+            stage.lineTo(this.x + this.w, this.y);
             //stage.lineTo()
             stage.fill();
             stage.fillStyle = '#000000';
         }
     }
 
-    scroll(scrollSpd){
+    scroll(scrollSpd) {
 
         this.x -= scrollSpd;
 
@@ -82,7 +82,7 @@ class Spike {
 
 class Bounce {
 
-    constructor(x,y,w,h,c){
+    constructor(x, y, w, h, c) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -97,7 +97,7 @@ class Bounce {
         this.type = 'bounce';
     }
 
-    draw(){
+    draw() {
         stage.fillStyle = this.color;
         stage.lineWidth = 1;
         stage.fillRect(this.x, this.y, this.w, this.h);
@@ -105,7 +105,7 @@ class Bounce {
         stage.fillStyle = '#000';
     }
 
-    scroll(scrollSpd){
+    scroll(scrollSpd) {
 
         this.x -= scrollSpd;
 
@@ -114,7 +114,7 @@ class Bounce {
 }
 
 class Powerup {
-    constructor(x, y, w, h, type, name, expires, expireTime, uses){
+    constructor(x, y, w, h, type, name, expires, expireTime, uses) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -135,27 +135,27 @@ class Powerup {
         this.type = type;
         this.name = name;
 
-        this.img.src = "sprites/powerups/"+this.type+".png";
+        this.img.src = "sprites/powerups/" + this.type + ".png";
     }
 
-    draw(){
+    draw() {
         //stage.fillRect(this.x, this.y, this.w, this.h);
         stage.drawImage(this.img, this.x, this.y, this.w, this.h);
     }
 
-    update(){
-        if(this.expires){
-            this.expireTime--;
+    update(deltaTime) {
+        if (this.expires) {
+            this.expireTime -= deltaTime;
         }
     }
 
-    scroll(scrollSpd){
+    scroll(scrollSpd) {
         this.x -= scrollSpd;
     }
 }
 
 class Pog {
-    constructor(x, y, w, h,img){
+    constructor(x, y, w, h, img) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -168,25 +168,25 @@ class Pog {
         this.magnetSpd = Math.floor(Math.random() * (25 - 20) + 20)
 
         this.img = new Image();
-        this.img.src = "sprites/pogs/CP"+img+".png";
+        this.img.src = "sprites/pogs/CP" + img + ".png";
 
     }
 
-    draw(){
+    draw(deltaTime) {
         stage.drawImage(this.img, this.x, this.y, this.w, this.h);
-        if(this.magnetized){
+        if (this.magnetized) {
             var dirX = player.x - this.x;
             var dirY = player.y - this.y;
             var magnitude = Math.floor(Math.sqrt(dirX ** 2 + dirY ** 2));
             dirX = dirX / magnitude;
             dirY = dirY / magnitude;
 
-            this.x += dirX * this.magnetSpd;
-            this.y += dirY * this.magnetSpd;
+            this.x += dirX * this.magnetSpd * deltaTime;
+            this.y += dirY * this.magnetSpd * deltaTime;
         }
     }
 
-    scroll(scrollSpd){
+    scroll(scrollSpd) {
         this.x -= scrollSpd;
     }
 }

@@ -2,7 +2,7 @@ var stage = document.getElementById('canvas').getContext('2d');
 stage.canvas.width = window.innerWidth;
 stage.canvas.height = window.innerHeight;
 
-let screenHeightMagnitude = 1080/window.outerHeight;
+let screenHeightMagnitude = 1080 / window.outerHeight;
 stage.imageSmoothingEnabled = false;
 
 var screenShake = false;
@@ -128,7 +128,7 @@ var latestChunk = chunks[0];
 chunks[0].create();
 
 let then = Date.now();
-function getDeltaTime(){
+function getDeltaTime() {
     let now = Date.now()
     let dt = (now - then);
     then = now;
@@ -141,7 +141,7 @@ function update(timestamp) {
 
     stage.canvas.width = window.innerWidth;
     stage.canvas.height = window.innerHeight;
-    screenHeightMagnitude = 1080/window.outerHeight;
+    screenHeightMagnitude = 1080 / window.outerHeight;
     stage.clearRect(0, 0, stage.canvas.width, stage.canvas.height);
 
     stage.canvas.style.left = screenShake ? String(Math.random() * (shakeAmount - -shakeAmount) + -shakeAmount) + "px" : 0; //Screenshake
@@ -154,20 +154,16 @@ function update(timestamp) {
     //stage.fillStyle = 'green';
     //stage.fillRect(player.currentChunk.chunkX, player.currentChunk.chunkY, player.currentChunk.w, player.currentChunk.h);
 
-    gameTime++;
+    gameTime += deltaTime;
 
     globalScrollSpd = Math.floor((scrollSpd + (gameTime / 1000))); //Make scrollspeed speed up longer you play
-
-    globalScrollSpd = globalScrollSpd * deltaTime;
-
-    globalGravity = globalGravity * deltaTime;
 
     var chunkRightSideX = latestChunk.chunkX + latestChunk.w;
     var chunkLeftSideX = latestChunk.chunkX;
 
     for (chunk = 0; chunk < chunks.length; chunk++) {
-        chunks[chunk].draw();
-        chunks[chunk].scroll(globalScrollSpd, player);
+        chunks[chunk].draw(deltaTime);
+        chunks[chunk].scroll(globalScrollSpd, player, deltaTime);
 
         if (player.x + player.w >= chunkLeftSideX) player.currentChunk = latestChunk;
         for (block = 0; block < chunks[chunk].blocks.length; block++) {
@@ -246,14 +242,14 @@ function update(timestamp) {
 
     for (p = 0; p < particles.length; p++) {
         particles[p].draw();
-        particles[p].physics();
+        particles[p].physics(deltaTime);
         if (particles[p].y >= stage.canvas.height) {
             particles.splice(p, 1);
         }
     }
 
     for (l = 0; l < labels.length; l++) {
-        labels[l].draw();
+        labels[l].draw(deltaTime);
         if (labels[l].y <= -100) labels.splice(l, 1);
     }
 
@@ -273,8 +269,8 @@ function update(timestamp) {
     if (!player.dead) {
         player.draw();
         player.physics(deltaTime);
-        player.update();
-        scoreCD -= deltaTime; 
+        player.update(deltaTime);
+        scoreCD -= deltaTime;
         testPlayerCollisions(player.currentChunk);
     } else {
         if (!player.exploded) { //Make player explode if the player has not already exploded

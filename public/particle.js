@@ -1,6 +1,6 @@
 class Particle {
 
-    constructor(x,y,w,h,c,xv,yv,g){
+    constructor(x, y, w, h, c, xv, yv, g) {
 
         this.x = x;
         this.y = y;
@@ -17,7 +17,7 @@ class Particle {
 
     }
 
-    draw(){
+    draw() {
 
         stage.fillStyle = this.color;
         stage.fillRect(this.x, this.y, this.w, this.h);
@@ -25,19 +25,19 @@ class Particle {
 
     }
 
-    physics(){
+    physics(deltaTime) {
 
-        this.yv += this.gravity;
+        this.yv += this.gravity * deltaTime;
 
-        this.x+=this.xv;
-        this.y+=this.yv;
+        this.x += this.xv * deltaTime;
+        this.y += this.yv * deltaTime;
 
     }
 
 }
 
-class Label{
-    constructor(text,x,y,fontSize,color,RGB){
+class Label {
+    constructor(text, x, y, fontSize, color, RGB) {
         this.text = text;
         this.x = x;
         this.y = y;
@@ -48,14 +48,14 @@ class Label{
         this.RGB = RGB;
     }
 
-    draw(){
+    draw(deltaTime) {
 
         stage.font = this.fontSize + 'px CoolFont';
-        if(this.RGB) this.color = 'rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')';
+        if (this.RGB) this.color = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
         stage.fillStyle = this.color;
         stage.fillText(this.text, this.x, this.y);
 
-        this.y -= this.riseSpd;
+        this.y -= this.riseSpd * deltaTime;
 
     }
 }
